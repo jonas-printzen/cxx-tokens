@@ -1,7 +1,5 @@
 # Coding challenge: Variants on C++ tokenizer
 
-> **_WorkInProgress_**: Main-code, utest and Makefile still missing
-
 ## Purpose
 This repo contains the basic setup for a simple C++ coding challenge. The basic
 problem description can be found below, in this `README`. The code in
@@ -14,7 +12,7 @@ compiler, editor and more. Only the code, basic documentation and a Makefile
 is in this repo. oh, and the minimalistic unit-test code of course.
 
 ## The basic problem
-We will parse a text, with readable C++ code and as fast and as possible.
+We will parse a text, with readable C++ code and as fast as possible.
 The input is a random text (Lorem Ipsum), the output is an array of 32-bit hash
 values of the words from the text.
 

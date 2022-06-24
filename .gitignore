@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+*LOG.md
+
+toks
+toks_g
+
 # Compiled Object files
 *.slo
 *.lo

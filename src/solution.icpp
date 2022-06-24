@@ -1,0 +1,8 @@
+
+void TokenizeAll( Input &in, Output &out ) {
+  // NotImplemented
+}
+
+void TokenizeBlock( txtfrag blk, Output &out ) {
+  // NotImplemented
+}
