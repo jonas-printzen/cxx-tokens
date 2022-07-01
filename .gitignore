@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+*.orig
+
 *LOG.md
 
 toks

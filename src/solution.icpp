@@ -1,8 +1,12 @@
+#include <toks.hpp>
 
-void TokenizeAll( Input &in, Output &out ) {
+
+size_t TokenizeAll( Input &txt, Output &out ) {
   // NotImplemented
+  return 0;
 }
 
-void TokenizeBlock( txtfrag blk, Output &out ) {
+size_t TokenizeBlock( txtfrag blk, Output &out ) {
   // NotImplemented
+  return 0;
 }

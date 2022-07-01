@@ -15,25 +15,23 @@ void WarmUp( Input &txt, Output &out ) {
   // Timeout one second ahead
   auto timeout = Now() + WARMUP_TIME;
   do {
-    out.clear();
     TokenizeAll( txt, out );
   } while( Now() < timeout );
 }
 
 void OnePass( Input&txt, Output &out ) {
   std::cout << "Starting OnePass ... "; std::cout.flush();
+  out[0] = 0;
   int64_t tokens = 0;
   usecs_t t0 = Now();
   usecs_t t1=t0;
   usecs_t timeout = t0 + TOKENIZE_TIME;
   do {
-    out.clear();
-    TokenizeAll( txt, out );
-    tokens += out.size();
+    tokens += TokenizeAll( txt, out );
     t1 = Now();
   } while( t1 < timeout );
 
-  double toks_per_usec = tokens ? double(tokens) / (double(t1)-double(t0)) : 0.;
+  double toks_per_usec = tokens ? static_cast<double>(tokens) / (static_cast<double>(t1)-static_cast<double>(t0)) : 0.;
 
   std::cout << "=> " << std::setprecision(3) << toks_per_usec << " tokens per µs, "
             "CheckHashes() => " << (CheckHashes(out)?"OK":"Nope!") << std::endl;
@@ -41,6 +39,7 @@ void OnePass( Input&txt, Output &out ) {
 
 void BlockWize( Input&txt, Output &out ) {
   std::cout << "Starting BlockWize ... "; std::cout.flush();
+  out[0] = 0;
   int64_t tokens = 0;
   usecs_t t0 = Now();
   usecs_t t1=t0;
@@ -50,19 +49,17 @@ void BlockWize( Input&txt, Output &out ) {
     size_t full_blocks = len/BLOCK_SIZE;
     size_t reminder = len%BLOCK_SIZE;
     while( full_blocks-- ) {
-      TokenizeBlock({p,BLOCK_SIZE},out);
+      tokens += TokenizeBlock({p,BLOCK_SIZE},out);
       p += BLOCK_SIZE;
     }
     if( reminder ) {
-      TokenizeBlock({p,reminder},out);
+      tokens += TokenizeBlock({p,reminder},out);
     }
 
-    tokens += out.size();
-    out.clear();
     t1 = Now();
   } while( t1 < timeout );
 
-  double toks_per_usec = tokens ? double(tokens) / (double(t1)-double(t0)) : 0.;
+  double toks_per_usec = tokens ? static_cast<double>(tokens) / (static_cast<double>(t1)-static_cast<double>(t0)) : 0.;
 
   std::cout << "=> " << std::setprecision(3) << toks_per_usec << " tokens per µs, "
             "CheckHashes() => " << (CheckHashes(out)?"OK":"Nope!") << std::endl;
@@ -85,14 +82,14 @@ Input::Input( const std::string &fname ) {
 }
 
 void Input::drop() {
-  auto p = data.txt;
+  auto p = std::get<0>(data);
   if( p ) {
     ::free((void*)p);
   }
   data = txtfrag{nullptr,0};
 }
 
-std::vector<hash32_t> good_hashes = {
+std::array<hash32_t,1000> good_hashes = {
 0x6aa73340,0x1847f92f,0x80afa4d5,0xc630015f,0xcf1f29aa,0xf0d4bb32,0x17bf76f2,0xd1d823b5,
 0x60d95848,0x4bc3578b,0x3c99dbb3,0x37386ae0,0x70c60ef2,0x7e1450e5,0xde3876a0,0x1847f92f,
 0xe5d11def,0x9ee2a996,0x57251588,0xfa690868,0x1f1a2168,0xc68830e5,0x74305278,0x5dc4ece3,

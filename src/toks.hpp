@@ -4,14 +4,16 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include <vector>
+#include <array>
 #include <filesystem>
 #include <fstream>
 #include <chrono>
+#include <tuple>
 
 using usecs_t=uint64_t;
 
-struct txtfrag { const char*txt; size_t len; };
+// struct txtfrag { const char*txt; size_t len; };
+using txtfrag=std::tuple<const char*,size_t>;
 
 using hash32_t=uint32_t;
 
@@ -45,7 +47,7 @@ public:
 
   inline txtfrag operator * () const { return data; }
 
-  inline size_t size() const { return data.len; }
+  inline size_t size() const { return std::get<1>(data); }
 
 private:
   txtfrag data;
@@ -53,7 +55,7 @@ private:
 
 
 /** @brief The output */
-using Output = std::vector<hash32_t>;
+using Output = std::array<hash32_t,1000>;
 
 extern void OnePass( Input&txt, Output &out );
 extern void BlockWize( Input&txt, Output &out );
