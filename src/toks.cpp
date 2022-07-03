@@ -3,10 +3,8 @@
 #include <stdlib.h>
 #include <solution.icpp>
 
-const usecs_t WARMUP_TIME=1000000;
+const usecs_t WARMUP_TIME=2000000;
 const usecs_t TOKENIZE_TIME=2000000;
-
-const size_t BLOCK_SIZE=1000;
 
 bool CheckHashes( const Output &out );
 
@@ -75,18 +73,18 @@ Input::Input( const std::string &fname ) {
 
   size_t sz = afile.file_size();
   char* p = (char*)::malloc(sz);
-  data = txtfrag{p,sz};
+  **this = txtfrag{p,sz};
 
   std::ifstream infile(fname);
   infile.read(p,sz);
 }
 
 void Input::drop() {
-  auto p = std::get<0>(data);
+  auto p = txt;
   if( p ) {
     ::free((void*)p);
   }
-  data = txtfrag{nullptr,0};
+  **this = txtfrag{nullptr,0};
 }
 
 std::array<hash32_t,1000> good_hashes = {

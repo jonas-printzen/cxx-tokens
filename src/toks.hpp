@@ -10,10 +10,9 @@
 #include <chrono>
 #include <tuple>
 
-using usecs_t=uint64_t;
+#include <string.h>
 
-// struct txtfrag { const char*txt; size_t len; };
-using txtfrag=std::tuple<const char*,size_t>;
+using usecs_t=uint64_t;
 
 using hash32_t=uint32_t;
 
@@ -30,32 +29,31 @@ inline hash32_t Hash32(const char *txt, size_t len) {
     return hash;
 }
 
-
 inline usecs_t Now() {
   auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
   return std::chrono::duration_cast<std::chrono::microseconds>(now).count();
 }
 
+struct txtfrag {
+  const char *txt=nullptr;
+  size_t      len=0;
+};
 
 /** @brief The input data */
-class Input {
+class Input : public txtfrag {
 public:
   Input( const std::string &fname );
   ~Input();
 
   void drop();
 
-  inline txtfrag operator * () const { return data; }
-
-  inline size_t size() const { return std::get<1>(data); }
-
-private:
-  txtfrag data;
+  inline txtfrag &operator * () { return *this; }
+  inline size_t size() const { return len; }
 };
 
-
 /** @brief The output */
-using Output = std::array<hash32_t,1000>;
+inline constexpr size_t BLOCK_SIZE=1000;
+using Output = std::array<hash32_t,BLOCK_SIZE>;
 
 extern void OnePass( Input&txt, Output &out );
 extern void BlockWize( Input&txt, Output &out );

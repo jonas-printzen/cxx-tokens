@@ -22,7 +22,7 @@ toks_g: ${SOURCES:%.cpp=%_g.o}
 	${CXX} -g -o $@ $^
 
 %_g.o: %.cpp ${HEADERS}
-	g++ -std=c++20 -g -O1 -Wall -o $@ -Isrc -c $<
+	g++ -std=c++20 -g -fno-inline -Wall -o $@ -Isrc -c $<
 
 src/toks.o,src/toks_g.o: src/solution.icpp
 
