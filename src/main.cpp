@@ -7,8 +7,6 @@ int main(int,char**) {
   Input txt("lorem.txt");
   Output out;
 
-  std::cout << "out.size() => " << out.size() << std::endl;
-
   WarmUp( txt, out );
 
   OnePass(txt,out);
